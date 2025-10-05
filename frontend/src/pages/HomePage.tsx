@@ -1,24 +1,28 @@
-import { useNavigate } from "react-router-dom";
+import Sidemenu from "@/components/sidemenu";
+import { useEffect, useRef } from "react";
+import Globe from "react-globe.gl";
 
 export default function HomePage() {
-  const navigate = useNavigate();
+  const globeRef = useRef<any>(null);
+  useEffect(() => {
+    const controls = globeRef.current.controls();
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 2;
+  }, []);
+
   return (
     <div
-      className="h-screen bg-cover bg-center bg-no-repeat font-poppins flex flex-col items-center justify-center gap-5"
-      style={{ backgroundImage: `url('background.jpeg')` }}
+      className="flex h-screen bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: "url('/space-background.jpg')" }}
     >
-      <div className="flex flex-col gap-1">
-        <h1 className="font-bold text-5xl text-center">YOUR JOURNEY</h1>
-        <h1 className="font-bold text-7xl text-center">TO THE CLOUD</h1>
-        <h1 className="font-bold text-5xl text-center">BEGINS HERE</h1>
+      <Sidemenu />
+      <div className="flex-1">
+        <Globe
+          backgroundColor="rgba(0,0,0,0)"
+          ref={globeRef}
+          globeImageUrl="world-light-high-quality.png"
+        />
       </div>
-
-      <button
-        className="font-bold text-3xl bg-[#0087FD] rounded-full px-5 py-2 shadow-black shadow-xl z-10"
-        onClick={() => navigate("/dashboard")}
-      >
-        GET STARTED
-      </button>
     </div>
   );
 }

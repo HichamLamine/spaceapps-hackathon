@@ -6,7 +6,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
 
 interface ChatResponse {
-  data: string;
+  user_message: string;
+  chatgpt_reply: string;
+}
+
+interface Message {
+  text: string;
+  isUser: boolean;
+  status?: Status;
 }
 
 export default function AssistantPage() {
@@ -15,7 +22,7 @@ export default function AssistantPage() {
   function handleSend(message: string) {
     setMessages((prev) => [
       ...prev,
-      { text: message, isUser: true },
+      { text: message, isUser: true, status: "success" },
       {
         text: "The ai is loading your outfit",
         isUser: false,
@@ -24,6 +31,7 @@ export default function AssistantPage() {
     ]);
     getData(message);
   }
+
   async function getData(input?: string) {
     let url = "http://127.0.0.1:8000/chatgpt";
     if (input) {
@@ -38,7 +46,7 @@ export default function AssistantPage() {
         prev.map((msg) =>
           msg.status === "loading" && !msg.isUser
             ? {
-                text: result.data,
+                text: result.chatgpt_reply,
                 isUser: false,
                 status: "success",
               }
@@ -55,11 +63,11 @@ export default function AssistantPage() {
   }
 
   return (
-    <div className="flex gap-3">
+    <div className="flex gap-3 w-full">
       <Sidemenu />
-      <div className="flex flex-col min-h-screen bg-background">
+      <div className="flex-1 flex flex-col min-h-screen bg-background">
         <main className="flex-1 overflow-auto pb-[125px] sm:pb-[70px]">
-          <ScrollArea className="h-full px-4 py-6 md:px-8 space-y-6 max-w-3xl mx-auto">
+          <ScrollArea className="h-full px-4 py-6 md:px-8 space-y-6 w-full">
             <Chat messages={messages} />
           </ScrollArea>
           <ChatBar onSend={handleSend} />
@@ -107,11 +115,14 @@ interface ChatsProps {
 
 function Chat({ messages }: ChatsProps) {
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 w-full">
       {messages.map((msg, i) => (
-        <div key={i} className="flex flex-col">
-          <ChatBubble text={msg.text} isUser={msg.isUser} />
-          <Skeleton key={i} className="w-full  h-6 rounded-lg" />
+        <div key={i} className="flex flex-col w-full">
+          {msg.status === "success" ? (
+            <ChatBubble text={msg.text} isUser={msg.isUser} />
+          ) : (
+            <Skeleton key={i} className="w-full h-8 rounded-lg" />
+          )}
         </div>
       ))}
     </div>
@@ -134,9 +145,3 @@ function ChatBubble({ text, isUser }: ChatProps) {
 }
 
 type Status = "loading" | "error" | "success";
-
-interface Message {
-  text: string;
-  isUser: boolean;
-  status?: Status;
-}
