@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Lightbulb } from "lucide-react";
+import { Droplet, Lightbulb, ShieldCheck, Thermometer } from "lucide-react";
 
 import { useState, useEffect } from "react";
 
@@ -74,8 +74,10 @@ const PollutantInfo = ({ cityName }: Props) => {
   if (!data) return null;
 
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       <VictoryPie
+        innerRadius={50}
+        padAngle={5}
         data={[
           { x: "pm2.5", y: data.pollutants["pm2.5"] },
           { x: "pm10", y: data.pollutants.pm10 },
@@ -86,6 +88,19 @@ const PollutantInfo = ({ cityName }: Props) => {
         ]}
         theme={VictoryTheme.clean}
       />
+
+      <div className="flex gap-1">
+        <Thermometer color="#0087FD" />
+        <span>Temperature: {data.temperature}</span>
+      </div>
+      <div className="flex gap-1">
+        <Droplet color="#0087FD" />
+        <span>Humidity: {data.humidity}</span>
+      </div>
+      <div className="flex items-center justify-center gap-2 border border-[#0087FD] text-[#0087FD] font-semibold rounded-xl px-4 py-2 w-fit mx-auto mt-4">
+        <ShieldCheck className="w-5 h-5" />
+        <span className="text-xl">Air Quality Index: {data.AQI}</span>
+      </div>
     </div>
   );
 };
@@ -147,7 +162,7 @@ function SelectCities({ city, onCityChange }: SelectProps) {
 
   return (
     <div className="w-full max-w-xs space-y-2 ">
-      <Label htmlFor={id}>Cities</Label>
+      <Label htmlFor={id}>Choose your city</Label>
       <Select onValueChange={handleSelect} defaultValue={cities[0].label}>
         <SelectTrigger id={id} className="w-full">
           <SelectValue placeholder="Select your city" />
@@ -173,13 +188,12 @@ export default function DashboardPage() {
     <div className="flex w-full">
       <Sidemenu />
       <div className="flex flex-col w-full gap-5 p-4">
-        <div className="bg-green-300 p-2 rounded-2xl px-4 flex gap-2">
+        <div className="bg-[#0087FD] p-2 rounded-2xl px-4 flex gap-2">
           <Lightbulb />
           <p>
             The air quality in this area is determined by measuring key
-            polluants (PM2.5;PM10;NO2...).
-            <br />
-            Air quality indexed (AQI) reflects how clean or polluted the air is.
+            polluants (PM2.5;PM10;NO2...). Air quality index (AQI) reflects how
+            clean or polluted the air is.
           </p>
         </div>
         <div className="flex justify-center">

@@ -35,7 +35,7 @@ function MenuItem({ title, icon, route }: MenuItem) {
 
   return (
     <div
-      className={`flex gap-1 ${location.pathname == route ? "text-green-500" : "text-white"}`}
+      className={`flex gap-1 ${location.pathname == route ? "text-[#0087FD]" : "text-white"}`}
       onClick={() => navigate(route)}
     >
       {icon}

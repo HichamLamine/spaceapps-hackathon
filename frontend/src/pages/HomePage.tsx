@@ -17,6 +17,13 @@ export default function HomePage() {
     >
       <Sidemenu />
       <div className="flex-1">
+        <div className="text-center mt-10">
+          <h2 className="text-4xl md:text-5xl font-bold">
+            Turning <span className="text-[#0087FD]">EarthData</span> into{" "}
+            <span className="italic text-[#0087FD]">EarthCare</span>
+          </h2>
+          <div className="mt-2 w-16 h-1 bg-[#0087FD] mx-auto rounded-full"></div>
+        </div>
         <Globe
           backgroundColor="rgba(0,0,0,0)"
           ref={globeRef}
