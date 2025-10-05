@@ -137,11 +137,15 @@ interface ChatProps {
 function ChatBubble({ text, isUser }: ChatProps) {
   return (
     <div
-      className={` rounded-xl p-2 px-3 ${isUser === true ? "self-end bg-[#303030]" : "self-start"}`}
+      className={`max-w-[80%] px-5 py-3 rounded-2xl mb-4 text-base leading-relaxed
+        shadow-md backdrop-blur-sm transition-all duration-300
+        ${isUser
+          ? "self-end bg-gradient-to-br from-[#4a4a4a] to-[#2e2e2e] text-white shadow-[0_0_12px_rgba(255,255,255,0.06)]"
+          : "self-start bg-[#1f1f1f]/80 text-gray-200 border border-[#2b2b2b] shadow-[0_0_10px_rgba(0,0,0,0.5)]"
+        }
+      `}
     >
       {text}
     </div>
   );
 }
-
-type Status = "loading" | "error" | "success";
