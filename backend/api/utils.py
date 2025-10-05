@@ -1,26 +1,7 @@
-<<<<<<< HEAD
 import requests
 import ast
 from typing import Dict, Optional
 import api
-
-def extract_all_pollutants(response: api.OpenAQResponse) -> Dict[str, Optional[Dict]]:
-    pollutants: Dict[str, Optional[Dict]] = {}
-    if not response.results:
-        return pollutants
-
-    location = response.results[0]
-
-    if hasattr(location, "measurements") and location.measurements:
-        for m in location.measurements:
-            pollutants[m.parameter.name] = {
-                "value": m.value,
-                "unit": m.parameter.units,
-                "lastUpdated": getattr(m, "lastUpdated", None)
-            }
-    return pollutants
-
-
 
 
 def load_city_dict(file_path: str) -> Dict[str, int]:
@@ -37,9 +18,8 @@ def load_city_dict(file_path: str) -> Dict[str, int]:
         return {}
 
 
-def main():
-    city_map = load_city_dict("city_ids.txt")
-    city_name = 'A2P8277T (🇺🇸 US)'
+def get_city_data (city_name):
+    city_map = load_city_dict("../city_ids.txt")
 
     if city_name not in city_map:
         print(f"City '{city_name}' not found in map")
@@ -68,23 +48,19 @@ def main():
         print(f"Failed to parse OpenAQ response: {e}")
         return
 
-    pollutants_data = extract_all_pollutants(openaq_response)
+    import random
+    target_pollutants = {"co", "no", "no2", "o3", "pm10", "pm25", "so2", "pm1", "um003", "relativehumidity",
+                         "temperature"}
 
-    print(f"Pollutants for {city_name}:")
-    for pollutant, info in pollutants_data.items():
-        if info and info["value"] is not None:
-            print(f"  {pollutant.upper()}: {info['value']} {info['unit']}")
-        else:
-            print(f"  {pollutant.upper()}: No data")
+    for sensor in openaq_response.results[0].sensors:
+        param = sensor.parameter
+        name = param.name.lower()
 
 
-if __name__ == "__main__":
-    main()
-=======
-from fastapi import FastAPI
-from api import router 
+    # Print results
+    for sensor in openaq_response.results[0].sensors:
+        param = sensor.parameter
+        print(f"{param.displayName}: {getattr(param, 'value', 'N/A')} {param.units}")
+    return openaq_response
 
-app = FastAPI()
-app.include_router(router)
 
->>>>>>> c37d315817e75338b3fe575fa256c0e4e9cdaff5
