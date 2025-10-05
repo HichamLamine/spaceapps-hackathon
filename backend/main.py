@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import requests
 import ast
 from typing import Dict, Optional
@@ -79,3 +80,11 @@ def main():
 
 if __name__ == "__main__":
     main()
+=======
+from fastapi import FastAPI
+from api import router 
+
+app = FastAPI()
+app.include_router(router)
+
+>>>>>>> c37d315817e75338b3fe575fa256c0e4e9cdaff5
