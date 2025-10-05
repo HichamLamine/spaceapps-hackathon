@@ -58,7 +58,7 @@ import  utils,random
 
 @app.get("/pollutants")
 def get_pollutants(city: str = Query(..., description="City name to fetch pollutant data")):
-
+    random.seed(city.lower())
     pollution = {
         "pm2.5": round(random.uniform(0, 250), 1),
         "pm10": round(random.uniform(0, 300), 1),
