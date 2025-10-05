@@ -25,9 +25,9 @@ export default function AssistantPage() {
     getData(message);
   }
   async function getData(input?: string) {
-    let url = "https://fitdyalek-3eppe.ondigitalocean.app/api/chat";
+    let url = "http://127.0.0.1:8000/chatgpt";
     if (input) {
-      url += `?input=${encodeURIComponent(input)}`;
+      url += `?message=${encodeURIComponent(input)}`;
     }
 
     try {
