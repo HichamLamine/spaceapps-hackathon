@@ -1,16 +1,26 @@
 from fastapi import FastAPI, Query, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 import requests
 import os
 
 app = FastAPI()
 
 # -----------------------------
-# Load API key from environment variable
+# CORS settings
+# -----------------------------
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # or specify allowed origins: ["https://example.com"]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# -----------------------------
+# API Config
 # -----------------------------
 OPENAI_API_KEY = ""
 CHATGPT_URL = "https://api.openai.com/v1/chat/completions"
-
-
 
 @app.get("/chatgpt")
 def chatgpt(message: str = Query(..., description="Message to send to ChatGPT")):
